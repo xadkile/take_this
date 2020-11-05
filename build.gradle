@@ -1,0 +1,54 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath 'no.tornado:fxlauncher-gradle-plugin:1.0.20'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:6.1.0'
+    }
+}
+
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.4.10'
+    id 'application'
+    id 'org.openjfx.javafxplugin' version '0.0.8'
+    id 'java'
+}
+
+group = 'com.github.xadkile'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+dependencies {
+    testImplementation 'org.jetbrains.kotlin:kotlin-test-junit5'
+    implementation 'no.tornado:tornadofx:1.7.20'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.0-M1'
+    implementation 'com.dorkbox:SystemTray:3.17'
+
+
+}
+compileKotlin {
+    kotlinOptions.jvmTarget = '11'
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "11"
+}
+javafx {
+//    version = "11.0.2"
+    version = "14"
+    modules = ['javafx.controls', 'javafx.graphics']
+}
+//apply plugin:'no.tornado.fxlauncher'
+apply plugin: 'com.github.johnrengelman.shadow'
+mainClassName = 'MainKt'
+jar {
+    manifest{
+        attributes 'Main-Class': 'MainKt'
+    }
+}
+

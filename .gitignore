@@ -1,0 +1,6 @@
+/.project
+build/**
+bin/**
+.gradle/**
+.idea/**
+out/**

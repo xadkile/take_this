@@ -1,0 +1,59 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+buildscript {
+    repositories {
+        mavenCentral()
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath("no.tornado:fxlauncher-gradle-plugin:1.0.20")
+        classpath("com.github.jengelman.gradle.plugins:shadow:6.1.0")
+
+    }
+}
+plugins {
+    kotlin("jvm") version "1.4.10"
+    id ("org.openjfx.javafxplugin") version "0.0.9"
+//    id ("com.github.johnrengelman.shadow") version "6.1.0"
+//    id ("java")
+    id("application")
+    "no.tornado.fxlauncher"
+}
+
+group = "com.github.xadkile"
+version = "1.0-SNAPSHOT"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+dependencies {
+    testImplementation(kotlin("test-junit5"))
+    testImplementation(kotlin("test-junit"))
+    implementation ("no.tornado:tornadofx:1.7.20")
+}
+tasks.withType<KotlinCompile>() {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+javafx{
+    version = "11.0.2"
+    modules = listOf("javafx.controls", "javafx.graphics")
+}
+
+//jar{
+//    manifest{
+//
+//    }
+//}
+
+//apply (plugin="no.tornado.fxlauncher")
+//fxlauncher {
+//    applicationVendor="My Company"
+//    // Base URL where you will host the application artifacts
+//    applicationUrl =""
+//    applicationMainClass= "MainKt"
+//    acceptDowngrade =false
+//    // Optional scp target for application artifacts hosted at the above url
+//    deployTarget =""
+//}
