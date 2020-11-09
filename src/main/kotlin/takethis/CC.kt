@@ -7,6 +7,6 @@ import java.net.URL
 
 object CC {
     val SCREEN_SIZE:Rectangle = Rectangle(Toolkit.getDefaultToolkit().screenSize)
-    val robot = Robot()
+//    val robot = Robot()
 }
 

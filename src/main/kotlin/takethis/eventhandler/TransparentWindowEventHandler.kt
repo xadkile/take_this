@@ -8,12 +8,13 @@ import javafx.util.Duration
 import takethis.other.CapturerImp
 //import view.CroppingWindow
 import takethis.view.FloatImagePanel
-import takethis.other.ImageScope
+import takethis.scope.ImageScope
+import takethis.state.FloatImagePanelState
 import takethis.view.TransparentWindow
 import tornadofx.*
 import kotlin.math.abs
 
-class TransparentWindowEventHandler: Component() {
+class TransparentWindowEventHandler : Component() {
 
     fun onMousePressed(event: MouseEvent, transparentWindow: TransparentWindow) {
         transparentWindow.updateMouseArchorPoint(event.sceneX, event.sceneY)
@@ -47,13 +48,19 @@ class TransparentWindowEventHandler: Component() {
         transparentWindow.hide()
         runLater(Duration(200.0)) {
             val image: WritableImage? = CapturerImp.take(
-                    Rectangle2D(
-                            transparentWindow.croppingPane.x, transparentWindow.croppingPane.y,
-                            transparentWindow.croppingPane.width, transparentWindow.croppingPane.height
-                    )
+                Rectangle2D(
+                    transparentWindow.croppingPane.x, transparentWindow.croppingPane.y,
+                    transparentWindow.croppingPane.width, transparentWindow.croppingPane.height
+                )
             )
             if (image != null) {
-                val imageScope = ImageScope(image, transparentWindow.croppingPane.x, transparentWindow.croppingPane.y)
+                val imageScope = ImageScope(
+                    FloatImagePanelState(
+                        positionX = transparentWindow.croppingPane.x,
+                        positionY = transparentWindow.croppingPane.y,
+                        currentImage = image
+                    )
+                )
                 val imageView = tornadofx.find<FloatImagePanel>(imageScope)
                 imageView.openWindow(StageStyle.UNDECORATED)
             }

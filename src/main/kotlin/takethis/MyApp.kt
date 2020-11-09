@@ -11,6 +11,7 @@ import java.util.*
 
 /**
  * Create test for this
+ * -Djdk.gtk.version=3
  */
 class MyApp : App(IndependentWindow::class) {
 
@@ -19,7 +20,7 @@ class MyApp : App(IndependentWindow::class) {
         //start the software in tray if possible
         this.findIndeWindow().hideW()
         val systemTray: SystemTray? = SystemTray.get()
-        if (systemTray != null && false) {
+        if (systemTray != null&&false) {
             Platform.setImplicitExit(false)
             systemTray.setImage(Constants.ICON_URL)
 
