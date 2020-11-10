@@ -18,7 +18,7 @@ class MyApp : App(IndependentWindow::class) {
     override fun start(stage: Stage) {
         super.start(stage)
         //start the software in tray if possible
-        this.findIndeWindow().hideW()
+        this.findIndeWindow().hide()
         val systemTray: SystemTray? = SystemTray.get()
         if (systemTray != null&&false) {
             Platform.setImplicitExit(false)
@@ -37,7 +37,7 @@ class MyApp : App(IndependentWindow::class) {
             val openTestWindow = MenuItem("Test window") { event ->
                 Platform.runLater {
 
-                    this@MyApp.findIndeWindow().showW()
+                    this@MyApp.findIndeWindow().show()
                 }
             }
 
@@ -59,7 +59,7 @@ class MyApp : App(IndependentWindow::class) {
                     when(op.get()){
                         ButtonType.YES -> {
                             Platform.runLater {
-                                find<IndependentWindow>().showW()
+                                find<IndependentWindow>().show()
                             }
                         }
                         ButtonType.NO -> Platform.exit()

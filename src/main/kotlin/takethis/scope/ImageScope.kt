@@ -2,14 +2,13 @@ package takethis.scope
 
 import javafx.scene.image.Image
 import takethis.state.FloatImagePanelState
+import takethis.viewupdater.FloatImagePanelViewUpdater
 import tornadofx.Scope
+import kotlin.reflect.KClass
 
 /**
- * A data ferry class to pass [image] to a [FloatImagePanel]
+ * A data ferry class to pass initial state to a [FloatImagePanel]
  */
 class ImageScope(
-//    val image: Image,
-//    val spawPositionX: Double,
-//    val spawPositionY: Double,
-    val initState: FloatImagePanelState
+    val initState: FloatImagePanelState,
 ) : Scope()

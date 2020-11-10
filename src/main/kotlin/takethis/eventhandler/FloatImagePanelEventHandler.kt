@@ -6,7 +6,6 @@ import javafx.scene.control.ContextMenu
 import javafx.scene.control.MenuItem
 import javafx.scene.image.Image
 import javafx.scene.input.MouseEvent
-import takethis.stateupdater.FloatImagePanelStateManager
 import takethis.view.FloatImagePanel
 import tornadofx.Component
 import java.io.File
@@ -19,13 +18,13 @@ import kotlin.math.abs
  * By changing the view state, I will indirectly change the view appearance.
  * To do that, i need to write up some binding between the state and the view
  */
-class FloatImagePanelEventHandler : Component() {
+class FloatImagePanelEventHandler  {
 
     fun onMousePressed(event: MouseEvent, fip: FloatImagePanel) {
         if (event.isPrimaryButtonDown) {
             fip.currentStage?.also {
-                fip.stateManager.changeXDistanceToMouse(abs(event.screenX - it.x))
-                fip.stateManager.changeYDistanceToMouse(abs(event.screenY - it.y))
+                fip.stateUpdater.changeXDistanceToMouse(abs(event.screenX - it.x))
+                fip.stateUpdater.changeYDistanceToMouse(abs(event.screenY - it.y))
             }
         } else {
             println("secondary:Show context menu")
@@ -42,13 +41,13 @@ class FloatImagePanelEventHandler : Component() {
             contextMenu.show(fip.currentWindow)
 
             val file: File = Paths.get("").toFile()
-            fip.stateManager.changePreventClose(true)
+            fip.stateUpdater.changePreventClose(true)
         }
     }
 
     fun onMouseReleased(event: MouseEvent, fip: FloatImagePanel) {
-        if (fip.stateManager.state.preventClose) {
-            fip.stateManager.changePreventClose(false)
+        if (fip.stateUpdater.state.preventClose) {
+            fip.stateUpdater.changePreventClose(false)
         } else {
             fip.close()
         }
@@ -56,13 +55,12 @@ class FloatImagePanelEventHandler : Component() {
 
     fun onMouseDragged(event: MouseEvent, fip: FloatImagePanel) {
         if (event.isPrimaryButtonDown) {
-            println(event.screenX - fip.stateManager.state.xDistanceToMouse)
-            fip.stateManager.changeXPosition(event.screenX - fip.stateManager.state.xDistanceToMouse)
+            fip.stateUpdater.changeXPosition(event.screenX - fip.stateUpdater.state.xDistanceToMouse)
 
-            fip.stateManager.changeYPosition(
-                event.screenY - fip.stateManager.state.yDistanceToMouse
+            fip.stateUpdater.changeYPosition(
+                event.screenY - fip.stateUpdater.state.yDistanceToMouse
             )
-            fip.stateManager.changePreventClose(true)
+            fip.stateUpdater.changePreventClose(true)
         }
     }
 

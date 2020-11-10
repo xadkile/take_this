@@ -34,13 +34,13 @@ class IndependentWindow: View() {
         this.primaryStage.isAlwaysOnTop=true
     }
 
-    fun hideW(){
+    fun hide(){
         this.currentStage?.also{
             it.hide()
         }
     }
 
-    fun showW(){
+    fun show(){
         this.currentStage?.also{
             it.show()
         }
