@@ -12,7 +12,6 @@ import org.testfx.api.FxRobot
 import org.testfx.api.FxToolkit
 import org.testfx.framework.junit5.ApplicationExtension
 import org.testfx.framework.junit5.Start
-import takethis.CC
 import tornadofx.*
 import java.util.function.Supplier
 import tornadofx.launch

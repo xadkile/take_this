@@ -1,15 +1,21 @@
 package takethis.view
 
+ import javafx.geometry.Rectangle2D
+ import javafx.scene.input.MouseEvent
+ import javafx.scene.paint.Color
+ import javafx.scene.paint.Paint
  import javafx.scene.shape.Rectangle
-import takethis.eventhandler.TransparentWindowEventHandler
-import javafx.geometry.Rectangle2D
-import javafx.scene.input.MouseEvent
-import javafx.scene.paint.Color
-import javafx.scene.paint.Paint
-import javafx.scene.shape.StrokeType
-import takethis.CC
-import takethis.Utils.CO.qweLength
-import tornadofx.*
+ import javafx.scene.shape.StrokeType
+ import javafx.stage.Screen
+ import takethis.Common
+ import takethis.Utils.CO.qweLength
+ import takethis.eventhandler.TransparentWindowEventHandler
+ import tornadofx.Fragment
+ import tornadofx.pane
+ import tornadofx.rectangle
+ import tornadofx.style
+ import java.awt.GraphicsEnvironment
+
 
 //cannot have another constructor because takethis.other constructor, takethis.other than the default, will not work, unless I accept using setter to inject my updater into this after construction
 //to test event handler. I have to shield TransparentWindow under an interface, then let the handler accept an instance of this interface, and work with property of TransparentWindow via that interface. A lot of boiler code and have to use var, and latinit, and shit
@@ -30,6 +36,8 @@ class TransparentWindow: Fragment(title = "transparent window") {
     lateinit var croppingPane:Rectangle
     var anchorX = 0.0
     var anchorY = 0.0
+    var anchorXScreen = 0.0
+    var anchorYScreen = 0.0
     override val root = pane {
         style {
             backgroundColor += Color.TRANSPARENT
@@ -43,24 +51,25 @@ class TransparentWindow: Fragment(title = "transparent window") {
             height=0.0
         }
         setOnMouseDragged { event: MouseEvent ->
-            eventHandler.onMouseDraggedOnPane(event,tpw)
+            eventHandler.onMouseDraggedOnPane(event, tpw)
         }
         setOnMouseReleased { event: MouseEvent ->
-            eventHandler.onMouseRelease(event,tpw)
+            eventHandler.onMouseRelease(event, tpw)
         }
-        setOnMousePressed {event:MouseEvent->
-            eventHandler.onMousePressed(event,tpw)
+        setOnMousePressed { event: MouseEvent->
+            eventHandler.onMousePressed(event, tpw)
         }
     }
 
     override fun onDock() {
+        val bounds: Rectangle2D = Common.bounds
         this.currentStage?.also{
             it.opacity = opacity
-            it.height = CC.SCREEN_SIZE.getHeight()
-            it.width = CC.SCREEN_SIZE.getWidth()
-            it.isResizable = false
-            it.x = windowPositionX
-            it.y = windowPositionY
+            it.height = bounds.height
+            it.width = bounds.width
+            it.x = bounds.minX
+            it.y = bounds.minY
+            it.isMaximized=true
         }
         this.primaryStage.isAlwaysOnTop=true
         this.hideCroppingPane()
@@ -84,17 +93,17 @@ class TransparentWindow: Fragment(title = "transparent window") {
         this.currentStage?.hide()
     }
 
-    fun updateMouseArchorPoint(x:Double, y:Double){
+    fun updateMouseArchorPoint(x: Double, y: Double){
         this.anchorX = x
         this.anchorY = y
     }
 
-    fun relocateCroppingPane(x:Double, y:Double){
+    fun relocateCroppingPane(x: Double, y: Double){
         this.croppingPane.x = x
         this.croppingPane.y = y
     }
 
-    fun resizeCroppingPane(width:Double, height:Double){
+    fun resizeCroppingPane(width: Double, height: Double){
         this.croppingPane.width=qweLength(width)
         this.croppingPane.height= qweLength(height)
     }

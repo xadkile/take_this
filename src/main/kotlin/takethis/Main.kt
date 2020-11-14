@@ -20,6 +20,7 @@ import javax.swing.SwingUtilities
  * add configure:
  *      transparent window always on top?
  *      test window always on top?
+ *      -Djdk.gtk.version=3
  */
 fun main(args: Array<String>) {
     println("start app")

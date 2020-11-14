@@ -6,7 +6,9 @@ import javafx.application.Platform
 import javafx.scene.control.Alert
 import javafx.scene.control.ButtonType
 import javafx.stage.Stage
-import tornadofx.*
+import tornadofx.App
+import tornadofx.find
+import java.security.Permissions
 import java.util.*
 
 /**
@@ -18,9 +20,11 @@ class MyApp : App(IndependentWindow::class) {
     override fun start(stage: Stage) {
         super.start(stage)
         //start the software in tray if possible
+        val sm = System.getSecurityManager()
+//        sm.checkPermission()
         this.findIndeWindow().hide()
         val systemTray: SystemTray? = SystemTray.get()
-        if (systemTray != null&&false) {
+        if (systemTray != null/*&&false*/) {
             Platform.setImplicitExit(false)
             systemTray.setImage(Constants.ICON_URL)
 
@@ -53,7 +57,8 @@ class MyApp : App(IndependentWindow::class) {
                 val alert = Alert(
                     Alert.AlertType.NONE,
                     Constants.OPEN_INDEPENDENT_WINDOW_REQUEST,
-                    ButtonType.YES, ButtonType.NO)
+                    ButtonType.YES, ButtonType.NO
+                )
                 val op: Optional<ButtonType>? = alert.showAndWait()
                 if(op!=null && op.isPresent){
                     when(op.get()){

@@ -4,6 +4,8 @@ import dorkbox.systemTray.Menu
 import dorkbox.systemTray.MenuItem
 import dorkbox.systemTray.SystemTray
 import javafx.application.Platform
+import javafx.geometry.Rectangle2D
+import javafx.stage.Screen
 import javafx.stage.StageStyle
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -20,15 +22,10 @@ class IndependentWindow: View() {
         }
     }
 
-    override fun onUndock() {
-        println("undock")
-    }
-
     override fun onDock() {
-        println("dock")
         this.currentStage?.also{
             it.isResizable=false
-            it.x = CC.SCREEN_SIZE.maxX
+            it.x = Common.bounds.maxX
             it.y = 0.0
         }
         this.primaryStage.isAlwaysOnTop=true
