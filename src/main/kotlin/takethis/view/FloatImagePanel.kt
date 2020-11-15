@@ -23,7 +23,7 @@ class FloatImagePanel : Fragment() {
     val stateUpdater = FloatImagePanelStateUpdater(scope.initState)
 
 //    val viewUpdater = FloatImagePanelViewUpdater(false)
-    val viewUpdater = FloatImagePanelViewUpdater()
+    var viewUpdater = FloatImagePanelViewUpdater()
 
     var eventHandler = FloatImagePanelViewEventHandler()
 
@@ -33,14 +33,11 @@ class FloatImagePanel : Fragment() {
         setOnMousePressed { event ->
             eventHandler.onMousePressed(event, this@FloatImagePanel)
             viewUpdater.update(this@FloatImagePanel,stateUpdater.state)
-//            println(this@FloatImagePanel.isDocked)
-            println("pressed")
         }
 
         setOnMouseReleased { event ->
             eventHandler.onMouseReleased(event, this@FloatImagePanel)
             viewUpdater.update(this@FloatImagePanel,stateUpdater.state)
-            println("released")
         }
 
         setOnMouseDragged { event: MouseEvent ->

@@ -1,9 +1,6 @@
 package takethis.view
 
-import io.mockk.confirmVerified
-import io.mockk.every
-import io.mockk.mockk
-import io.mockk.verify
+import io.mockk.*
 import javafx.application.Platform
 import javafx.scene.image.Image
 import javafx.scene.input.MouseButton
@@ -13,6 +10,7 @@ import javafx.stage.Stage
 import javafx.util.Duration
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Assertions.assertFalse
+import org.testfx.api.FxToolkit
 import org.testfx.robot.impl.ClickRobotImpl
 import takethis.eventhandler.FloatImagePanelViewEventHandler
 import takethis.scope.ImageScope
@@ -33,7 +31,8 @@ internal class FloatImagePanelTest : BaseTornadoTest() {
     lateinit var fip: FloatImagePanel
     lateinit var initState: FloatImagePanelState
     lateinit var viewUpdater: FloatImagePanelViewUpdater
-
+    val mockEventHandler = mockk<FloatImagePanelViewEventHandler>(relaxed = true)
+    val mockViewUpdater = mockk<FloatImagePanelViewUpdater>(relaxed = true)
     @BeforeEach
     fun localBefore() {
         initState = fip.stateUpdater.state.copy()
@@ -76,44 +75,72 @@ internal class FloatImagePanelTest : BaseTornadoTest() {
     @Test
     @DisplayName("Event handlers are triggered when mouse primary button is pressed")
     fun testBinding_MousePressed_Primary() {
-        val mockEventHandler = mockk<FloatImagePanelViewEventHandler>(relaxed = true)
-
         fip.eventHandler = mockEventHandler
-
-        every { mockEventHandler.onMousePressed(any(), any()) } returns Unit
-        every { mockEventHandler.onMouseReleased(any(), any()) } returns Unit
-
+        fip.viewUpdater = mockViewUpdater
         Platform.runLater {
             val robot = Robot()
             robot.mouseMove(100.0, 100.0)
             robot.mouseClick(MouseButton.PRIMARY)
         }
 
-        runLater(Duration(300.0)) {
-            verify {
+        runLater(Duration(300.0)) { //wait for the view to update
+            verify (exactly = 1){
                 mockEventHandler.onMouseReleased(any(),any())
                 mockEventHandler.onMousePressed(any(), any())
             }
+
+            verify(exactly=2) {
+                mockViewUpdater.update(any(),any())
+            }
+
             confirmVerified(mockEventHandler)
         }
+
     }
 
     @Test
     @DisplayName("Event handlers are triggered when mouse secondary button is pressed")
     fun testBinding_MousePressed_Secondary() {
+        fip.eventHandler = mockEventHandler
+        Platform.runLater {
+            val robot = Robot()
+            robot.mouseMove(100.0, 100.0)
+            robot.mouseClick(MouseButton.SECONDARY)
+        }
 
-    }
+        runLater(Duration(300.0)) { //wait for the view to update
+            verify (exactly = 1){
+                mockEventHandler.onMouseReleased(any(),any())
+                mockEventHandler.onMousePressed(any(), any())
+            }
 
-    @Test
-    @DisplayName("Event handlers are triggered when mouse primary button is release ")
-    fun testBinding_MouseReleased_Primary() {
+            verify(exactly=2) {
+                mockViewUpdater.update(any(),any())
+            }
 
+            confirmVerified(mockEventHandler)
+        }
     }
 
     @Test
     @DisplayName("Event handlers are triggered when mouse is dragged")
     fun testBinding_MouseDragged() {
+        fip.eventHandler = mockEventHandler
 
+        Platform.runLater {
+            val robot = Robot()
+            robot.mouseMove(100.0, 100.0)
+            robot.mousePress(MouseButton.PRIMARY)
+            robot.mouseMove(200.0, 100.0)
+            robot.mouseRelease(MouseButton.PRIMARY)
+        }
+
+        runLater(Duration(300.0)) { //wait for the view to update
+            verify(atLeast = 1) {
+                mockEventHandler.onMouseDragged(any(), any())
+            }
+            confirmVerified(mockEventHandler)
+        }
     }
 
     override fun setUpCode(
