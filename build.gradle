@@ -53,10 +53,10 @@ javafx {
 }
 //apply plugin:'no.tornado.fxlauncher'
 apply plugin: 'com.github.johnrengelman.shadow'
-mainClassName = 'MainKt'
+mainClassName = 'takethis.MainKt'
 jar {
     manifest{
-        attributes 'Main-Class': 'MainKt'
+        attributes 'Main-Class': 'takethis.MainKt'
     }
 }
 

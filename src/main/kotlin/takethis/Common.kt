@@ -12,7 +12,8 @@ object Common {
     val bounds: Rectangle2D = screen.visualBounds
     fun openTransparentWindow(){
         Platform.runLater {
-            val t = find<TransparentWindow>().openWindow(StageStyle.UNDECORATED)
+//            val t = find<TransparentWindow>().openWindow(StageStyle.UNDECORATED)
+            val t = find<TransparentWindow>().openModal(StageStyle.UNDECORATED)
         }
     }
 
